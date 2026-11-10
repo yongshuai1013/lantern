@@ -1,0 +1,104 @@
+name: Build Android (Custom)
+
+# Fork-only workflow: builds installable release-mode Android APKs with a
+# user-triggered workflow_dispatch. Unlike the upstream build-android.yml it
+# needs no repository secrets:
+#   * GRADLE_PROPERTIES -> an empty ~/.gradle/gradle.properties is written, so
+#     no KEYSTORE_FILE/KEYSTORE_PWD/KEY_ALIAS/KEY_PWD properties exist and
+#     android/app/build.gradle falls back to the debug signing config for
+#     the release build type.
+#   * APP_ENV -> an empty placeholder app.env is created (same as the
+#     upstream android-compile-check / android-abi-candidate workflows).
+#   * KEYSTORE -> never decoded; see the debug-signing fallback above.
+# The resulting APK is debug-signed: installable for testing, but it cannot
+# be updated over a Play-signed install.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-android-custom-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    env:
+      BUILD_TYPE: custom
+      INSTALLER_NAME: lantern-installer
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Stamp candidate version
+        run: echo "APP_VERSION=$(./scripts/ci/version.sh generate nightly)" >> "$GITHUB_ENV"
+
+      - name: Set up Go
+        uses: ./.github/actions/setup-go
+        with:
+          cache-scope: android-custom
+          gomobile-cache: "true"
+
+      - name: Set up Android
+        uses: ./.github/actions/setup-android
+
+      - name: Install Flutter
+        uses: ./.github/actions/setup-flutter
+
+      # Secrets intentionally blanked out on this fork: no release keystore
+      # properties, so the release build uses the debug signing config.
+      - name: Write empty gradle properties (no keystore secrets)
+        run: |
+          mkdir -p ~/.gradle/
+          echo "GRADLE_USER_HOME=${HOME}/.gradle" >> $GITHUB_ENV
+          : > ~/.gradle/gradle.properties
+
+      # Satisfy the pubspec asset declaration; no APP_ENV secret on the fork.
+      - name: Create placeholder app.env
+        run: touch app.env
+
+      - name: Install dependencies (gomobile)
+        run: make install-android-deps
+        env:
+          GOMOBILECACHE: ${{ env.GOMOBILECACHE }}
+
+      - name: Build Android (APK + AAB)
+        run: make android-release-ci
+        env:
+          GOMOBILECACHE: ${{ env.GOMOBILECACHE }}
+
+      - name: Verify release architectures
+        run: |
+          abis=$(sed -n 's/^android.abis=//p' android/abi-targets.properties)
+          check=(python3 scripts/ci/verify_android_abis.py --expected-abis "$abis" --release --aar bin/android/liblantern.aar)
+          "${check[@]}" --aab lantern-installer-custom.aab
+          "${check[@]}" --app-abis arm64-v8a --apk lantern-installer-custom.apk
+          "${check[@]}" --app-abis armeabi-v7a --apk lantern-installer-custom-armv7.apk
+          sha256sum lantern-installer-custom.apk lantern-installer-custom-armv7.apk \
+            lantern-installer-custom.aab > android-custom.sha256
+
+      - name: Upload Android APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: lantern-installer-apk-custom
+          path: |
+            lantern-installer-custom.apk
+            lantern-installer-custom-armv7.apk
+            android-custom.sha256
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Upload Android AAB
+        uses: actions/upload-artifact@v4
+        with:
+          name: lantern-installer-aab-custom
+          path: lantern-installer-custom.aab
+          if-no-files-found: error
+          retention-days: 7

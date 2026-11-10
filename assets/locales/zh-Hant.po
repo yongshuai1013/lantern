@@ -2271,3 +2271,43 @@ msgstr "在其他裝置上開啟"
 
 msgid "open_on_another_device_hint"
 msgstr "這台電視沒有網頁瀏覽器。請在手機或電腦上掃描 QR 碼或輸入網址。"
+
+# Custom device ID (Android ID override) settings page.
+msgid "device_id_settings"
+msgstr "裝置 ID"
+
+msgid "device_id_current"
+msgstr "目前裝置 ID"
+
+msgid "device_id_source_custom"
+msgstr "來源：自訂"
+
+msgid "device_id_source_system"
+msgstr "來源：系統 Android ID"
+
+msgid "device_id_notice"
+msgstr "更換裝置 ID 等於換一台新裝置：流量額度與 Pro 訂閱綁定會跟著新 ID 走，不會自動遷移。"
+
+msgid "device_id_field_label"
+msgstr "自訂裝置 ID"
+
+msgid "device_id_hint"
+msgstr "16 位十六進位字元"
+
+msgid "device_id_generate"
+msgstr "生成新 ID"
+
+msgid "device_id_save"
+msgstr "儲存"
+
+msgid "device_id_use_system"
+msgstr "恢復使用系統 ID"
+
+msgid "device_id_saved_restart"
+msgstr "裝置 ID 已儲存。重啟 App 後生效。"
+
+msgid "device_id_cleared_restart"
+msgstr "已移除自訂裝置 ID。重啟 App 後生效。"
+
+msgid "device_id_invalid"
+msgstr "ID 格式不正確：請輸入正好 16 位十六進位字元（0-9、a-f）。"

@@ -50,6 +50,10 @@ class AppRouter extends RootStackRouter {
       page: VPNSetting.page,
     ),
     AutoRoute(
+      path: '/device-id-setting',
+      page: DeviceIdSetting.page,
+    ),
+    AutoRoute(
       path: '/unbounded-setting',
       page: ActionModeSetting.page,
     ),

@@ -74,6 +74,7 @@ import 'package:lantern/features/split_tunneling/website_split_tunneling.dart'
     as _i47;
 import 'package:lantern/features/support/support.dart' as _i45;
 import 'package:lantern/features/vpn/server_selection.dart' as _i38;
+import 'package:lantern/features/setting/device_id_setting.dart' as _i53;
 
 /// generated route for
 /// [_i1.Account]
@@ -554,6 +555,22 @@ class DeveloperMode extends _i48.PageRouteInfo<void> {
     name,
     builder: (data) {
       return const _i11.DeveloperMode();
+    },
+  );
+}
+
+/// generated route for
+/// [_i53.DeviceIdSetting]
+class DeviceIdSetting extends _i48.PageRouteInfo<void> {
+  const DeviceIdSetting({List<_i48.PageRouteInfo>? children})
+    : super(DeviceIdSetting.name, initialChildren: children);
+
+  static const String name = 'DeviceIdSetting';
+
+  static _i48.PageInfo page = _i48.PageInfo(
+    name,
+    builder: (data) {
+      return const _i53.DeviceIdSetting();
     },
   );
 }

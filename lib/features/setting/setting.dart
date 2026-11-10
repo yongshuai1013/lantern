@@ -23,6 +23,7 @@ enum _SettingType {
   signIn,
   authorizeDevice,
   vpnSetting,
+  deviceId,
   actionModeSetting,
   language,
   widget,
@@ -170,6 +171,19 @@ class _SettingState extends ConsumerState<Setting>
                   icon: AppImagePaths.glob,
                   onPressed: () => settingMenuTap(_SettingType.vpnSetting),
                 ),
+                if (PlatformUtils.isAndroid) ...[
+                  DividerSpace(),
+                  AppTile(
+                    tileKey: const Key('setting.device_id_tile'),
+                    label: 'device_id_settings'.i18n,
+                    icon: Icon(Icons.fingerprint),
+                    trailing: AppImage(
+                      path: AppImagePaths.arrowForward,
+                      height: 20,
+                    ),
+                    onPressed: () => settingMenuTap(_SettingType.deviceId),
+                  ),
+                ],
                 if (unboundedAvailable) ...[
                   DividerSpace(),
                   AppTile(
@@ -341,6 +355,9 @@ class _SettingState extends ConsumerState<Setting>
         break;
       case _SettingType.vpnSetting:
         appRouter.push(VPNSetting());
+        break;
+      case _SettingType.deviceId:
+        appRouter.push(const DeviceIdSetting());
         break;
       case _SettingType.actionModeSetting:
         appRouter.push(ActionModeSetting());

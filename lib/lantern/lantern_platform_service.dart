@@ -404,6 +404,48 @@ class LanternPlatformService implements LanternCoreService {
     }
   }
 
+  /// The device ID currently in effect, plus where it came from.
+  ///
+  /// Returns a map with `deviceId` (the ID the backend will use) and
+  /// `source` (`custom` when a user-defined ID is stored, otherwise
+  /// `system` for the device's Android ID). Android only.
+  Future<Either<Failure, Map<String, String>>> getEffectiveDeviceId() async {
+    try {
+      final res = await _methodChannel.invokeMapMethod<String, String>(
+        'getEffectiveDeviceId',
+      );
+      return right(res ?? <String, String>{});
+    } catch (e, st) {
+      appLogger.error('getEffectiveDeviceId failed', e, st);
+      return Left(e.toFailure());
+    }
+  }
+
+  /// Stores a custom device ID (16 hex characters). The backend picks it
+  /// up the next time it starts, so the app must be restarted afterwards.
+  Future<Either<Failure, Unit>> setCustomDeviceId(String deviceId) async {
+    try {
+      await _methodChannel.invokeMethod('setCustomDeviceId', {
+        'deviceId': deviceId,
+      });
+      return right(unit);
+    } catch (e, st) {
+      appLogger.error('setCustomDeviceId failed', e, st);
+      return Left(e.toFailure());
+    }
+  }
+
+  /// Removes the custom device ID so the system Android ID is used again.
+  Future<Either<Failure, Unit>> clearCustomDeviceId() async {
+    try {
+      await _methodChannel.invokeMethod('clearCustomDeviceId');
+      return right(unit);
+    } catch (e, st) {
+      appLogger.error('clearCustomDeviceId failed', e, st);
+      return Left(e.toFailure());
+    }
+  }
+
   @override
   Future<Either<Failure, Unit>> setPeerProxyEnabled(bool enabled) async {
     try {

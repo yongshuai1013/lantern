@@ -33,6 +33,8 @@ import org.getlantern.lantern.service.LanternVpnService
 import org.getlantern.lantern.updater.AndroidSideloadInstaller
 import org.getlantern.lantern.updater.AndroidSideloadUpdateRequest
 import org.getlantern.lantern.utils.AppLogger
+import org.getlantern.lantern.utils.CustomDeviceIdStore
+import org.getlantern.lantern.utils.DeviceUtil
 import org.getlantern.lantern.utils.PrivateServerListener
 import org.getlantern.lantern.utils.VpnStatusManager
 import org.json.JSONArray
@@ -92,6 +94,11 @@ enum class Methods(val method: String) {
 
     //Device
     RemoveDevice("removeDevice"),
+
+    //Custom device ID (Android ID override)
+    GetEffectiveDeviceId("getEffectiveDeviceId"),
+    SetCustomDeviceId("setCustomDeviceId"),
+    ClearCustomDeviceId("clearCustomDeviceId"),
     AttachReferralCode("attachReferralCode"),
     AttachReferralCodeV2("attachReferralCodeV2"),
 
@@ -937,6 +944,31 @@ class MethodHandler : FlutterPlugin,
                             e
                         )
                     }
+                }
+            }
+
+            Methods.GetEffectiveDeviceId.method -> {
+                scope.handleValue(result, "get_effective_device_id") {
+                    val custom = CustomDeviceIdStore.getCustomDeviceId(appContext)
+                    mapOf(
+                        "deviceId" to (DeviceUtil.deviceId() ?: ""),
+                        "source" to if (custom != null) "custom" else "system",
+                    )
+                }
+            }
+
+            Methods.SetCustomDeviceId.method -> {
+                scope.handleResult(result, "set_custom_device_id") {
+                    val id = call.argument<String>("deviceId") ?: error("Missing deviceId")
+                    if (!CustomDeviceIdStore.setCustomDeviceId(appContext, id)) {
+                        error("Invalid device ID: must be exactly 16 hex characters")
+                    }
+                }
+            }
+
+            Methods.ClearCustomDeviceId.method -> {
+                scope.handleResult(result, "clear_custom_device_id") {
+                    CustomDeviceIdStore.clearCustomDeviceId(appContext)
                 }
             }
 

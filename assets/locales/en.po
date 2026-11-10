@@ -2400,3 +2400,43 @@ msgstr "Open on another device"
 
 msgid "open_on_another_device_hint"
 msgstr "This TV has no web browser. Scan the code or type the address on your phone or computer."
+
+# Custom device ID (Android ID override) settings page.
+msgid "device_id_settings"
+msgstr "Device ID"
+
+msgid "device_id_current"
+msgstr "Current device ID"
+
+msgid "device_id_source_custom"
+msgstr "Source: Custom"
+
+msgid "device_id_source_system"
+msgstr "Source: System Android ID"
+
+msgid "device_id_notice"
+msgstr "Changing the device ID makes Lantern treat this device as a brand-new device. Your data-cap allowance and Pro subscription binding follow the new ID and are not migrated automatically."
+
+msgid "device_id_field_label"
+msgstr "Custom device ID"
+
+msgid "device_id_hint"
+msgstr "16 hexadecimal characters"
+
+msgid "device_id_generate"
+msgstr "Generate new ID"
+
+msgid "device_id_save"
+msgstr "Save"
+
+msgid "device_id_use_system"
+msgstr "Use system Android ID"
+
+msgid "device_id_saved_restart"
+msgstr "Device ID saved. Restart the app for the change to take effect."
+
+msgid "device_id_cleared_restart"
+msgstr "Custom device ID removed. Restart the app for the change to take effect."
+
+msgid "device_id_invalid"
+msgstr "Invalid ID: enter exactly 16 hexadecimal characters (0-9, a-f)."

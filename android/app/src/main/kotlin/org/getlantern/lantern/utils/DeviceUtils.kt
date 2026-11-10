@@ -24,6 +24,9 @@ object DeviceUtil {
     }
 
     fun deviceId(): String? {
+        // A user-defined custom device ID (Settings > Device ID) takes
+        // precedence over the system Android ID.
+        CustomDeviceIdStore.getCustomDeviceId(LanternApp.application)?.let { return it }
         val rawId = Settings.Secure.getString(
             LanternApp.application.contentResolver,
             Settings.Secure.ANDROID_ID

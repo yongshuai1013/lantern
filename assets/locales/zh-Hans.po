@@ -2263,3 +2263,43 @@ msgstr "在其他设备上打开"
 
 msgid "open_on_another_device_hint"
 msgstr "此电视没有网页浏览器。请在手机或电脑上扫描二维码或输入网址。"
+
+# Custom device ID (Android ID override) settings page.
+msgid "device_id_settings"
+msgstr "设备 ID"
+
+msgid "device_id_current"
+msgstr "当前设备 ID"
+
+msgid "device_id_source_custom"
+msgstr "来源：自定义"
+
+msgid "device_id_source_system"
+msgstr "来源：系统 Android ID"
+
+msgid "device_id_notice"
+msgstr "更换设备 ID 等于换一台新设备：流量额度与 Pro 订阅绑定会跟着新 ID 走，不会自动迁移。"
+
+msgid "device_id_field_label"
+msgstr "自定义设备 ID"
+
+msgid "device_id_hint"
+msgstr "16 位十六进制字符"
+
+msgid "device_id_generate"
+msgstr "生成新 ID"
+
+msgid "device_id_save"
+msgstr "保存"
+
+msgid "device_id_use_system"
+msgstr "恢复使用系统 ID"
+
+msgid "device_id_saved_restart"
+msgstr "设备 ID 已保存。重启 App 后生效。"
+
+msgid "device_id_cleared_restart"
+msgstr "已移除自定义设备 ID。重启 App 后生效。"
+
+msgid "device_id_invalid"
+msgstr "ID 格式不正确：请输入正好 16 位十六进制字符（0-9、a-f）。"
